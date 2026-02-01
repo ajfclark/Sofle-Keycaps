@@ -55,9 +55,11 @@ module sofle_left(legends=sofle_default_legends) {
         x=sofle_left_x_offset[$row][$column];
         y=sofle_left_y_offset[$row][$column];
         z=sofle_left_rotate[$row][$column];
+        legend=legends[$row][$column];
+        $key_bump=(legend=="F"?true:false);
 
         translate([x,y,0]) rotate([0,0,z])
-            legend(legends[$row][$column])
+            legend(legend)
                 children();
     }
 }
@@ -68,9 +70,11 @@ module sofle_right(legends=sofle_default_legends) {
         x=sofle_left_x_offset[$row][6-$column];
         y=sofle_left_y_offset[$row][6-$column];
         z=sofle_left_rotate[$row][6-$column];
+        legend=legends[$row][7+$column];
+        $key_bump=(legend=="J"?true:false);
 
         translate([-x,y,0]) rotate([0,0,-z])
-            legend(legends[$row][7+$column])
+            legend(legend)
                 children();
         }
 }
@@ -84,7 +88,6 @@ module ajp_row(row=3,column) {
 	$total_depth = $total_depth * 2/3;
 	
   if (row == 5){
-	echo(row);
     $top_tilt = -12.5;
     children();
   } else {
@@ -93,9 +96,9 @@ module ajp_row(row=3,column) {
 }
 
 sofle_ajfclark_legends = [
-  ["\u238b`~","1!","2@",     "3#",     "4$",     "5%",   "",  "", "6^",     "7&",     "8*",     "9(",     "0)", "-_"],
-  ["\u21b9",  "Q", "W",      "E",      "R",      "T",    "",  "", "Y",      "U",      "I",      "O",      "P",  "\u2327"],
-  ["\u2388",  "A", "S",      "D",      "F",      "G",    "",  "", "H",      "J",      "K",      "L",      ";:", "'\""],
+  ["1!","2@",     "3#",     "4$",     "5%",   "6^",  "", "",     "7&",     "8*",     "9(",     "0)", "-_","+="],
+  ["\u238b`~",  "Q", "W",      "E",      "R",      "T",    "",  "", "Y",      "U",      "I",      "O",      "P",  "\u2327"],
+  ["\u21b9",  "A", "S",      "D",      "F",      "G",    "",  "", "H",      "J",      "K",      "L",      ";:", "'\""],
   ["\u21e7",  "Z", "X",      "C",      "V",      "B",    "",  "", "N",      "M",      ",<",     ".>",     "/?", "\u21e7\u21b5"],
   ["",        "",  "\u2756", "\u2387", "\u2388","\u2207"," "," ", "\u2206", "\u2318", "\u2325", "\u2384", "",   ""],
 ];
@@ -106,11 +109,13 @@ $stem_support_type = "disable"; // [tines, brim, disabled]
 legends=sofle_ajfclark_legends;
 $double_sculpted=false;
 $double_sculpt_radius=400;
+$key_bump_depth = 1.5;
+$key_bump_edge = 1.4;
 
 sofle_both(legends) {
-	mt3_row(row=$row+1)
-	ajp_row(row=$row+1)    
-	key();
+    mt3_row(row=$row+1)
+    ajp_row(row=$row+1)
+    key();
 }
 
 //for(i=[0:1]) {
